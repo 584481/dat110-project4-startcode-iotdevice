@@ -20,9 +20,13 @@ public class RestClient {
 	private static String logpath = "/accessdevice/log";
 
 	public void doPostAccessEntry(String message) {
+		System.out.println("doPostAccessEntry");
+		
+		AccessMessage accesmsg = new AccessMessage(message);
+		Gson gson = new Gson();
 
 		// TODO: implement a HTTP POST on the service to post the message
-		RequestBody body = RequestBody.create(JSON, message);
+		RequestBody body = RequestBody.create(JSON, gson.toJson(accesmsg));
 		Request req = new Request.Builder().url("http://localhost:8080" + logpath).post(body).build();
 		OkHttpClient client = new OkHttpClient();
 		
@@ -38,12 +42,16 @@ public class RestClient {
 	private static String codepath = "/accessdevice/code";
 
 	public AccessCode doGetAccessCode() {
+		System.out.println("doGetAccessCode");
 		Gson gson = new Gson();
 		AccessCode code = null;
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder().url("http://localhost:8080" + codepath).get().build();
+		
 		try (Response response = client.newCall(request).execute()) {
-			code = gson.fromJson(gson.toJson(response.body().string()), AccessCode.class);
+			
+//			code = gson.fromJson(gson.toJson(response.body().string()), AccessCode.class);
+			code = gson.fromJson(response.body().string(), AccessCode.class);
 			System.out.println(response.body().string());
 		} catch (IOException e) {
 			System.out.println("oh no");
