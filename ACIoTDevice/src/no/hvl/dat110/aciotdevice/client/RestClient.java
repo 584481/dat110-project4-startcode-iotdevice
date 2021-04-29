@@ -49,10 +49,7 @@ public class RestClient {
 		Request request = new Request.Builder().url("http://localhost:8080" + codepath).get().build();
 		
 		try (Response response = client.newCall(request).execute()) {
-			
-//			code = gson.fromJson(gson.toJson(response.body().string()), AccessCode.class);
 			code = gson.fromJson(response.body().string(), AccessCode.class);
-			System.out.println(response.body().string());
 		} catch (IOException e) {
 			System.out.println("oh no");
 			e.printStackTrace();
